@@ -134,7 +134,6 @@ class Hidden_layer:
             
 
     def transmit_current(self):
-        #NOT IMPLEMENTED!
         for i in range(len(self.list_of_neurons)):
             impulse, _ = self.list_of_neurons[i].behave()
             for j in range(len(self.next_layer)):

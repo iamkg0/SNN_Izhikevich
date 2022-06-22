@@ -109,7 +109,7 @@ class IzhikevichNeuron:
 
     def ddf(self,x1,x2):
         val = 1/(np.abs(self.tau)*np.sqrt(np.pi)) * np.exp(-np.square((x1-x2)/self.tau))
-        return 1
+        return val*10
 
 
     def STDP(self):
@@ -118,7 +118,7 @@ class IzhikevichNeuron:
                 if self.spike_dt == 0 or self.objects[i].spike_dt == 0:
                     F_plus = self.learning_rate*self.assymetry*self.connections[i]
                     F_minus = self.learning_rate * (1-self.connections[i])
-                    self.connections[i] += F_plus * self.objects[i].impulse - F_minus * self.impulse
+                    self.connections[i] += self.ddf(self.spike_dt, self.objects[i].spike_dt) * (F_plus * self.objects[i].impulse - F_minus * self.impulse)
                 '''
                 if self.connections[i] >= 1:
                     self.connections[i] = 1- self.learning_rate
