@@ -2,16 +2,17 @@ from turtle import update
 from Neuron import *
 
 class Input_layer:
-    def __init__(self, next_layer, learning_rate=.001, resolution=.1, num_exc=10, num_inh=0, assymetry=1.05, update_weights=True):
+    def __init__(self, next_layer, learning_rate=.001, resolution=.1, num_exc=10, num_inh=0, assymetry=1.05, g=120, update_weights=True):
         self.next_layer = next_layer
         self.num_exc = num_exc
         self.num_inh = num_inh
+        self.g = g
         self.list_of_neurons = []
         for i in range(num_exc):
-            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights)
+            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, g=self.g)
             self.list_of_neurons.append(neuron)
         for i in range(num_exc, num_exc+num_inh):
-            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, inhibitory=True)
+            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, g=self.g, inhibitory=True)
             self.list_of_neurons.append(neuron) 
 
     
@@ -103,16 +104,17 @@ class Output_layer:
 
 
 class Hidden_layer:
-    def __init__(self, next_layer, learning_rate=.001, resolution=.1, num_exc=10, num_inh=0, assymetry=1.05, update_weights=True):
+    def __init__(self, next_layer, learning_rate=.001, resolution=.1, num_exc=10, num_inh=0, assymetry=1.05, update_weights=True, g=120):
         self.next_layer = next_layer
         self.num_exc = num_exc
         self.num_inh = num_inh
+        self.g = g
         self.list_of_neurons = []
         for i in range(num_exc):
-            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights)
+            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, g=self.g)
             self.list_of_neurons.append(neuron)
         for i in range(num_exc, num_exc+num_inh):
-            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, inhibitory=True)
+            neuron = IzhikevichNeuron(preset='RS', idx=i, learning_rate=learning_rate, assymetry=assymetry, update_weights=update_weights, g=self.g, inhibitory=True)
             self.list_of_neurons.append(neuron) 
 
     

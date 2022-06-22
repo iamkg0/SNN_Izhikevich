@@ -3,7 +3,7 @@ import numpy as np
 
 class IzhikevichNeuron:
     def __init__(self, resolution=.1, preset=None, a=.02, b=.2, c=-65, d=2, idx=None, noize=0,
-        learning_rate=.001, tau=20, assymetry=1.05, inhibitory=False, update_weights=True):
+        learning_rate=.001, tau=20, assymetry=1.05, g=20, inhibitory=False, update_weights=True):
         '''
         Variables:
         v - Membrane potential (mV), float
@@ -51,6 +51,7 @@ class IzhikevichNeuron:
         self.connections = {}
         self.objects = {}
         
+        self.g = g
         self.time = 0
         self.spike_dt = 0
         self.spike_t = 0
@@ -84,7 +85,7 @@ class IzhikevichNeuron:
             self.u += self.d
             self.spike_t = self.time
             self.spike_dt = 0
-            return impulse
+            return impulse * self.g
         else:
             self.spike_dt += self.resolution
             return 0
