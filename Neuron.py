@@ -3,7 +3,7 @@ import numpy as np
 
 class IzhikevichNeuron:
     def __init__(self, resolution=.1, preset=None, a=.02, b=.2, c=-65, d=2, idx=None, noize=0,
-        learning_rate=.001, tau=20, assymetry=1.05, g=20, inhibitory=False, update_weights=True):
+        learning_rate=.001, tau=20, assymetry=1.05, g=20, dirac_tau=5, inhibitory=False, update_weights=True):
         '''
         Variables:
         v - Membrane potential (mV), float
@@ -50,7 +50,8 @@ class IzhikevichNeuron:
 
         self.connections = {}
         self.objects = {}
-        
+
+        self.dirac_tau = dirac_tau        
         self.g = g
         self.time = 0
         self.spike_dt = 0
@@ -108,7 +109,7 @@ class IzhikevichNeuron:
 
 
     def ddf(self,x1,x2):
-        val = 1/(np.abs(self.tau)*np.sqrt(np.pi)) * np.exp(-np.square((x1-x2)/self.tau))
+        val = 1/(np.abs(self.dirac_tau)*np.sqrt(np.pi)) * np.exp(-np.square((x1-x2)/self.dirac_tau))
         return val*10
 
 
