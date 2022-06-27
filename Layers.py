@@ -27,7 +27,7 @@ class Input_layer:
     def make_connections(self):
         for i in range(len(self.list_of_neurons)):
             for j in range(len(self.next_layer)):
-                self.list_of_neurons[i].connections[j] = np.random.uniform(0,1)
+                self.list_of_neurons[i].connections[j] = np.random.uniform(.1,.9)
                 self.list_of_neurons[i].objects[j] = self.next_layer[j]
 
 
@@ -37,13 +37,11 @@ class Input_layer:
             
 
     def transmit_current(self):
-        #NOT IMPLEMENTED!
         for i in range(len(self.list_of_neurons)):
             impulse, _ = self.list_of_neurons[i].behave()
             for j in range(len(self.next_layer)):
-                self.next_layer[j].I += impulse
+                self.next_layer[j].I += impulse * self.list_of_neurons[i].connections[j]
             
-
 
     def current_sum(self, neuron_id):
         total_impulse = 0
@@ -137,7 +135,7 @@ class Hidden_layer:
         for i in range(len(self.list_of_neurons)):
             impulse, _ = self.list_of_neurons[i].behave()
             for j in range(len(self.next_layer)):
-                self.next_layer[j].I += impulse
+                self.next_layer[j].I += impulse * self.list_of_neurons[i].connections[j]
             
 
 

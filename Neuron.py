@@ -95,7 +95,7 @@ class IzhikevichNeuron:
     def connect_with(self, next_id):
         #doesnt work. However, implementation in layer class works somehow, same algorithm
         idx = next_id.idx
-        self.connections[idx] = np.random.uniform(0,1)
+        self.connections[idx] = np.random.uniform(.4,.6)
         self.objects[idx] = next_id
 
 
@@ -108,8 +108,8 @@ class IzhikevichNeuron:
             pass
 
 
-    def ddf(self,x1,x2):
-        val = 1/(np.abs(self.dirac_tau)*np.sqrt(np.pi)) * np.exp(-np.square((x1-x2)/self.dirac_tau))
+    def ddf(self,x):
+        val = 1/(np.abs(self.dirac_tau)*np.sqrt(np.pi)) * np.exp(-np.square(x/self.dirac_tau))
         return val*10
 
 
@@ -119,7 +119,9 @@ class IzhikevichNeuron:
                 if self.spike_dt == 0 or self.objects[i].spike_dt == 0:
                     F_plus = self.learning_rate*self.assymetry*self.connections[i]
                     F_minus = self.learning_rate * (1-self.connections[i])
-                    self.connections[i] += self.ddf(self.spike_dt, self.objects[i].spike_dt) * (F_plus * self.objects[i].impulse - F_minus * self.impulse)
+                    a = F_plus * self.impulse * self.ddf(self.time - self.objects[i].spike_t)
+                    b = F_minus * self.objects[i].impulse * self.ddf(self.objects[i].time - self.objects[i].spike_t)
+                    self.connections[i] += a-b  
                 '''
                 if self.connections[i] >= 1:
                     self.connections[i] = 1- self.learning_rate
