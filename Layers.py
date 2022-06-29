@@ -1,4 +1,3 @@
-from turtle import update
 from Neuron import *
 
 class Input_layer:

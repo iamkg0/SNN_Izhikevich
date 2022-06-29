@@ -1,4 +1,3 @@
-from msilib.schema import Error
 import numpy as np
 
 class IzhikevichNeuron:
@@ -116,18 +115,20 @@ class IzhikevichNeuron:
     def STDP(self):
         if self.update_weights == True:
             for i in self.connections.keys():
-                if self.spike_dt == 0 or self.objects[i].spike_dt == 0:
-                    F_plus = self.learning_rate*self.assymetry*self.connections[i]
-                    F_minus = self.learning_rate * (1-self.connections[i])
-                    a = F_plus * self.impulse * self.ddf(self.time - self.objects[i].spike_t)
-                    b = F_minus * self.objects[i].impulse * self.ddf(self.objects[i].time - self.objects[i].spike_t)
-                    self.connections[i] += a-b  
-                '''
-                if self.connections[i] >= 1:
-                    self.connections[i] = 1- self.learning_rate
-                if self.connections[i] <= 0:
-                    self.connections[i] = self.learning_rate
-                '''
+                if self.spike_t == 0 or self.objects[i].spike_t == 0:
+                    pass
+                else:
+                    if self.spike_dt == 0:
+                        delta = self.learning_rate * (self.connections[i]) * self.impulse
+                        self.connections[i] -= delta
+                    if self.objects[i].spike_dt == 0:
+                        delta = self.learning_rate * self.assymetry * (1 - self.connections[i]) * self.impulse
+                        self.connections[i] += delta
+                    if self.connections[i] >= 1:
+                        self.connections[i] = 1- self.learning_rate
+                    if self.connections[i] <= 0:
+                        self.connections[i] = self.learning_rate
+                
 
     def behave(self):
         self.dynamics()
