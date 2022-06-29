@@ -38,6 +38,7 @@ class IzhikevichNeuron:
         self.v = self.c
         self.u = b*self.v
         
+
         self.resolution = resolution
         self.idx = idx
         self.noize = noize
@@ -125,9 +126,10 @@ class IzhikevichNeuron:
                         delta = self.learning_rate * self.assymetry * (1 - self.connections[i]) * self.impulse
                         self.connections[i] += delta
                     if self.connections[i] >= 1:
-                        self.connections[i] = 1- self.learning_rate
+                        self.connections[i] = 1 - 1e-3
                     if self.connections[i] <= 0:
-                        self.connections[i] = self.learning_rate
+                        self.connections[i] = 1e-3
+                    
                 
 
     def behave(self):

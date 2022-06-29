@@ -26,7 +26,7 @@ class Input_layer:
     def make_connections(self):
         for i in range(len(self.list_of_neurons)):
             for j in range(len(self.next_layer)):
-                self.list_of_neurons[i].connections[j] = np.random.uniform(.1,.9)
+                self.list_of_neurons[i].connections[j] = np.random.uniform(.5,.5)
                 self.list_of_neurons[i].objects[j] = self.next_layer[j]
 
 
@@ -54,6 +54,11 @@ class Input_layer:
         for i in range(len(self.list_of_neurons)):
             self.list_of_neurons[i].I = 0
 
+
+    def weight_dynamics(self, turn_on = False):
+        for i in range(len(self.list_of_neurons)):
+            self.list_of_neurons[i].update_weights = turn_on
+        return
 
     def params(self):
         return self.list_of_neurons
@@ -92,7 +97,7 @@ class Output_layer:
             voltage_layer.append(voltage)
         return impulse_layer, voltage_layer
 
-    
+
     def drop_impulse(self):
         for i in range(len(self.list_of_neurons)):
             self.list_of_neurons[i].I = 0
