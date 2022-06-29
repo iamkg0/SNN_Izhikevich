@@ -154,3 +154,28 @@ class Hidden_layer:
     def drop_impulse(self):
         for i in range(len(self.list_of_neurons)):
             self.list_of_neurons[i].I = 0
+
+
+
+class Classifier:
+    def __init__(self, output_layer):
+        self.output_layer = output_layer
+
+
+    def __getitem__(self, i):
+        return self.stack[i]
+
+
+    def __len__(self):
+        return self.stack.shape[0]
+
+
+    def predict(self, duration=20, resolution=.1):
+        stack = np.zeros(len(self.output_layer))
+        for i in range(int(duration//resolution) + 1):
+            impulses, _ = self.output_layer.simulation(None, 0)
+            impulse_layer = np.array(impulses)
+            stack += impulse_layer
+        print(impulse_layer)
+        print(stack)
+        return np.argmax(stack)
