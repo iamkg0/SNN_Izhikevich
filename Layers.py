@@ -1,4 +1,6 @@
 from Neuron import *
+import pandas as pd
+import numpy as np
 
 class Input_layer:
     def __init__(self, next_layer, learning_rate=.001, resolution=.1, num_exc=10, num_inh=0, assymetry=1.05, g=120, update_weights=True):
@@ -23,10 +25,11 @@ class Input_layer:
         return self.num_exc+self.num_inh
 
 
-    def make_connections(self):
+    def make_connections(self, net_is_new=True):
         for i in range(len(self.list_of_neurons)):
             for j in range(len(self.next_layer)):
-                self.list_of_neurons[i].connections[j] = np.random.uniform(.5,.5)
+                if net_is_new == True:
+                    self.list_of_neurons[i].connections[j] = np.random.uniform(0,1)
                 self.list_of_neurons[i].objects[j] = self.next_layer[j]
 
 
@@ -59,6 +62,28 @@ class Input_layer:
         for i in range(len(self.list_of_neurons)):
             self.list_of_neurons[i].update_weights = turn_on
         return
+
+
+    def save_weights(self, filename='model_checkpoints/checkpoint_input.csv'):
+        full_layer =[]
+        for unit in self.list_of_neurons:
+            unit_layer = []
+            for i in range(len(unit.connections)):
+                unit_layer.append(unit.connections[i])
+            full_layer.append(unit_layer)
+        checkpoint = np.array(full_layer)
+        pd.DataFrame(checkpoint).to_csv(filename)
+
+        
+    def load_weights(self, filename='model_checkpoints/checkpoint_input.csv'):
+        df = pd.read_csv(filename)
+        checkpoint = df.to_numpy()
+        checkpoint = checkpoint[:,1:]
+        for unit in range(len(self.list_of_neurons)):
+            for i in range(len(self.list_of_neurons[unit].connections)):
+                self.list_of_neurons[unit].connections[i] = checkpoint[unit,i]
+
+
 
     def params(self):
         return self.list_of_neurons

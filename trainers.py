@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def two_layers_trainer(signal, in_layer, out_layer, target, power, time=100):
+def two_layers_trainer(signal, in_layer, out_layer, target, power, time=100, recovery_time=30):
+    in_layer.weight_dynamics(turn_on = True)
     for i in range(len(out_layer)):
         if i != target:
             out_layer[i].I = 1000
@@ -10,6 +11,12 @@ def two_layers_trainer(signal, in_layer, out_layer, target, power, time=100):
         in_layer.transmit_current()
         _ = out_layer.simulation(target, power)
         out_layer.drop_impulse()
+    if recovery_time != None:
+        in_layer.weight_dynamics(turn_on = False)
+        for i in range(recovery_time):
+            in_layer.transmit_current()
+            _ = out_layer.simulation(target, power)
+            out_layer.drop_impulse()
     return
 
 
