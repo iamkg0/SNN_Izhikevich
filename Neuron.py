@@ -139,5 +139,15 @@ class IzhikevichNeuron:
         return impulse, self.v
 
 
+    def reset_defaults(self):
+        self.v = self.c
+        self.u = self.b*self.v
+        self.time = 0
+        self.spike_dt = 0
+        self.spike_t = 0
+        self.impulse = 0
+        self.I = 0
+
+
     def params(self):
         return self.connections, self.objects

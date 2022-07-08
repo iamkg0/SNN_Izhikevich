@@ -82,7 +82,11 @@ class Input_layer:
         for unit in range(len(self.list_of_neurons)):
             for i in range(len(self.list_of_neurons[unit].connections)):
                 self.list_of_neurons[unit].connections[i] = checkpoint[unit,i]
+    
 
+    def restore_variables(self):
+        for i in range(len(self.list_of_neurons)):
+            self.list_of_neurons[i].reset_defaults()
 
 
     def params(self):
@@ -126,6 +130,11 @@ class Output_layer:
     def drop_impulse(self):
         for i in range(len(self.list_of_neurons)):
             self.list_of_neurons[i].I = 0
+
+
+    def restore_variables(self):
+        for i in range(len(self.list_of_neurons)):
+            self.list_of_neurons[i].reset_defaults()
 
 
 
